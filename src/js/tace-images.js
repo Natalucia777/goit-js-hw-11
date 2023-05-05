@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 export { taceImages };
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 const KEY = '36094261-707a3f1df60011e058a78caa9';
