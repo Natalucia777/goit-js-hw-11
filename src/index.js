@@ -1,21 +1,23 @@
 import './sass/index.scss';
-// Додатковий імпорт стилів
-import Notiflix from "notiflix";
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { galleryCard } from './js/gallery';
 import { taceImages } from './js/tace-images';
+import { taceImages } from './js/message';
+import { messageImgFound } from './js/message';
+import { messageNoSearch } from './js/message';
+import { messageNoFound } from './js/message';
+import { messageEndSearch } from './js/message';
 
 const searchForm = document.querySelector('#search-form');
 const galleryLink = document.querySelector('.gallery');
 const btnLoad = document.querySelector('.btn-load-more');
-
 let query = '';
 let page = 1;
 let simpleLightBox;
 const perPage = 40;
-
 searchForm.addEventListener('submit', onSearch);
 btnLoad.addEventListener('click', onLoadMoreBtn);
 onScroll();
@@ -25,23 +27,20 @@ function onSearch(e) {
   window.scrollTo({ top: 0 });
   page = 1;
   query = e.currentTarget.searchQuery.value.trim();
-  galleryLink.innerHTML = ''; 
+  galleryLink.innerHTML = '';
   btnLoad.classList.add('is-hidden');
-
   if (query === '') {
-    alertNoEmptySearch();
+    messageNoSearch();
     return;
   }
-
-  fetchImages(query, page, perPage)
+  taceImages(query, page, perPage)
     .then(({ data }) => {
       if (data.totalHits === 0) {
-        alertNoImagesFound();
+        messageNoFound();
       } else {
-        renderGallery(data.hits);
+        galleryCard(data.hits);
         simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-        alertImagesFound(data);
-
+        messageImgFound(data);
         if (data.totalHits > perPage) {
           btnLoad.classList.remove('is-hidden');
         }
@@ -56,17 +55,16 @@ function onSearch(e) {
 function onLoadMoreBtn() {
   page += 1;
   simpleLightBox.destroy();
-
-  fetchImages(query, page, perPage)
+  taceImages(query, page, perPage)
     .then(({ data }) => {
-      renderGallery(data.hits);
+      galleryCard(data.hits);
       simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
       const totalPages = Math.ceil(data.totalHits / perPage);
 
       if (page > totalPages) {
         loadMoreBtn.classList.add('is-hidden');
-        alertEndOfSearch();
+        messageEndSearch();
       }
     })
     .catch(error => console.log(error));
