@@ -18,14 +18,14 @@ const perPage = 40;
 
 searchForm.addEventListener('submit', onSearch);
 btnLoad.addEventListener('click', onLoadMoreBtn);
-
-
+onScroll();
+onToTopBtn();
 function onSearch(e) {
   e.preventDefault();
   window.scrollTo({ top: 0 });
   page = 1;
   query = e.currentTarget.searchQuery.value.trim();
-  galleryLink.innerHTML = '';
+  galleryLink.innerHTML = ''; 
   btnLoad.classList.add('is-hidden');
 
   if (query === '') {
@@ -51,4 +51,22 @@ function onSearch(e) {
     .finally(() => {
       searchForm.reset();
     });
+}
+function onLoadMoreBtn() {
+  page += 1;
+  simpleLightBox.destroy();
+
+  fetchImages(query, page, perPage)
+    .then(({ data }) => {
+      renderGallery(data.hits);
+      simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+
+      const totalPages = Math.ceil(data.totalHits / perPage);
+
+      if (page > totalPages) {
+        loadMoreBtn.classList.add('is-hidden');
+        alertEndOfSearch();
+      }
+    })
+    .catch(error => console.log(error));
 }
