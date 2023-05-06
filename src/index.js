@@ -52,6 +52,7 @@ function onSearch(e) {
       searchForm.reset();
     });
 }
+
 function onLoadMoreBtn() {
   page += 1;
   simpleLightBox.destroy();
