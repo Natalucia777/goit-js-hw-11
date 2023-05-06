@@ -5,7 +5,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { galleryCard } from './js/gallery';
 import { taceImages } from './js/tace-images';
-import { taceImages } from './js/message';
 import { messageImgFound } from './js/message';
 import { messageNoSearch } from './js/message';
 import { messageNoFound } from './js/message';
@@ -51,7 +50,6 @@ function onSearch(e) {
       searchForm.reset();
     });
 }
-
 function onLoadMoreBtn() {
   page += 1;
   simpleLightBox.destroy();
@@ -59,9 +57,7 @@ function onLoadMoreBtn() {
     .then(({ data }) => {
       galleryCard(data.hits);
       simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-
       const totalPages = Math.ceil(data.totalHits / perPage);
-
       if (page > totalPages) {
         loadMoreBtn.classList.add('is-hidden');
         messageEndSearch();
