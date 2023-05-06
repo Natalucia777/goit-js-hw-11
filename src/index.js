@@ -1,4 +1,4 @@
-import './sass/main.scss';
+import './sass/index.scss';
 // Додатковий імпорт стилів
 import Notiflix from "notiflix";
 import SimpleLightbox from "simplelightbox";
