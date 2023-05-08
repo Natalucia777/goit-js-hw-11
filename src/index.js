@@ -19,6 +19,25 @@ let simpleLightBox;
 const perPage = 40;
 searchForm.addEventListener('submit', onSearch);
 btnLoad.addEventListener('click', onLoadMoreBtn);
+
+const addButton = document.querySelector('.add-button');
+window.addEventListener('click', onScroll);
+addButton.addEventListener('click', onToTopBtn);
+function onScroll() {
+  const scroll = window.pageYOffset;
+  const position = documentElement.clientHeight;
+  if (scroll > position) {
+    addButton.classList.add('button-visible');
+  }
+  if (scroll < position) {
+    addButton.classList.remove('button-visible');
+  }
+}
+function onToTopBtn() {
+  if (window.pageYOffset > 0) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 onScroll();
 onToTopBtn();
 function onSearch(e) {
@@ -63,4 +82,5 @@ function onLoadMoreBtn() {
         messageEndSearch();
       }
     })
-    .catch(error => console.log(error)); }
+    .catch(error => console.log(error));
+}
